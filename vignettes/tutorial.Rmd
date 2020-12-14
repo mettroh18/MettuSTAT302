@@ -91,4 +91,29 @@ my_df <- data.frame("actual" = my_gapminder$lifeExp, "fitted" = y_hat, "continen
 ```
 Here we can see that there is a strong relationship and fit between fitted and actual values for the Oceanic countries. However, there is less of a relationship for the other 4 continents observed. Notably, these four do have similar plots but nonetheless have a weak correlation between the predicted and actual values. Overall, I would call this model fit weak and therefore there may be better variables through which models can be fitted aside from gdpPercap for the gapminder data.
 
+## A tutorial for my_knn_cv
+
+Let's look at the CV misclassification rate and training misclassification rate based on the output class ```species``` of the ```my_penguins``` data within the package, using the covariants ```bill_length_mm, bill_depth_mm, flipper_length_mm, and body_mass_g```. For this we wil use the k-nearest neighbors cross validation model on up to 10 neighbors (```k_nn```), with a 5-fold cross validation (```k_cv=5```). First, we must load the data, then we can iterate from 1 to 10 knn values:
+
+```{r}
+data <- data("my_penguins") %>%
+  select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, species)
+
+cv_errors <- c()
+train_errs <- c()
+for (i in c(1,10)) {
+  cv_val <- my_knn_cv(train = data1, cl = 'species', k_nn = i, k_cv = 5)[[1]]
+  #training_err_val <- my_knn_cv(train = data1, cl = 'species', k_nn = i, k_cv = 5)[[2]]
+  cv_errors <- append(cv_errors, cv_val)
+  #train_errs <- append(train_errs, training_err_val)
+}
+data.frame(k_values, cv_errors, train_errs)
+```
+
+State which model you would choose based on the training misclassification rates and which model you would choose based on the CV misclassification rates.
+Discuss which model you would choose in practice and why.
+Your explanation(s) should include a general description of what the process of cross-validation is doing and why it is useful.
+
+##
+
 
