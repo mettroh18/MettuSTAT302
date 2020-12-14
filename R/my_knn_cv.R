@@ -12,6 +12,7 @@
 #' @keywords cross-validation, prediction
 #'
 #' @import dplyr
+#' @import class
 #'
 #' @return List value containing the average Cross Validation (misclass) error
 #'   and the predicted class values.
@@ -48,12 +49,12 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
     test_values <- data_knn %>% filter(fold == i) %>% select(cl)
     test_values <- test_values[,1, drop = TRUE]
 
-    yhat_class <- knn(data_train, data_test, class, k=k_nn, prob=TRUE)
+    yhat_class <- class::knn(data_train, data_test, class, k=k_nn, prob=TRUE)
     misclass_rate <- sum(test_values != yhat_class) / length(test_values)
 
     misclass <- append(misclass, misclass_rate)
   }
   cv_err <- mean(misclass)
-  class <- knn(train %>% select (-cl), train %>% select (-cl), as.character(true_class), k=k_nn)
+  class <- knn(train %>% select (-cl), train %>% select (-cl), as.numeric(true_class), k=k_nn)
   return(as.list(cv_err, class))
 }

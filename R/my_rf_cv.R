@@ -8,6 +8,7 @@
 #'
 #' @keywords cross-validation, forest, prediction
 #' @import dplyr
+#' @import randomForest
 #'
 #' @return Numeric value of the cross validation error.
 #'
@@ -19,7 +20,8 @@
 #' @export
 
 my_rf_cv <- function(k) {
-  penguins <- data("my_penguins")
+  penguins <- my_penguins
+  penguins <- na.omit(penguins)
   #assigning folds to training data
   data <- penguins %>%
     select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)
@@ -40,7 +42,7 @@ my_rf_cv <- function(k) {
     test_values <- data %>% filter(fold == i) %>% select(body_mass_g)
     test_values <- test_values[,1, drop = TRUE]
 
-    MODEL <- randomForest(body_mass_g ~ bill_length_mm + bill_depth_mm + flipper_length_mm, data = data_train, ntree = 100)
+    MODEL <- randomForest::randomForest(body_mass_g ~ bill_length_mm + bill_depth_mm + flipper_length_mm, data = data_train, ntree = 100)
     predictions <- predict(MODEL, data_test)
 
     differences <- predictions - test_values

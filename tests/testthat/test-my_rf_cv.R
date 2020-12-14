@@ -1,10 +1,7 @@
 #tests within test-my_rf_cv file
 
 test_that("cross validation works", {
-  penguins <- data("my_penguins")
-  penguins <- na.omit(penguins)
-
-  expect_is(my_rf_cv(5), "double")
+  expect_is(my_rf_cv(5), "numeric")
 })
 
 test_that("non numeric parameter throws error", {

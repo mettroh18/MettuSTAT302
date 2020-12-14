@@ -25,11 +25,16 @@ This package was completed as a final project for a course at UW: STAT302, Stati
 * ```my_knn_cv``` : a function that runs a k-nearest neighbors cross validation on the given data
 * ```my_rf_cv``` : a function that runs a random forest cross validation on the given data
 
-To install the package, one should run the following in their console:
+To install and load the package, one should run the following in their console:
 ```{r eval=FALSE}
-devtools::install_github("mettroh18/MettuSTAT302")
+#devtools::install_github("mettroh18/MettuSTAT302")
+
+#do we need to load each of these if they are supposed to be imported into the package itself?
 library(MettuSTAT302)
 library(ggplot2)
+library(dplyr)
+library(class)
+library(randomForest)
 ```
 
 ## A tutorial for my_ttest.
@@ -86,8 +91,8 @@ my_matrix <- model.matrix(lifeExp ~ gdpPercap + continent, data = my_gapminder)
 y_hat <- my_matrix %*% as.matrix(my_coef)
 my_df <- data.frame("actual" = my_gapminder$lifeExp, "fitted" = y_hat, "continent" = my_gapminder$continent)
 
-#ggplot(my_df, aes(x=fitted, y=actual)) + 
-#  geom_point(aes(color=continent)) + facet_wrap(~ continent, scales = "free") 
+ggplot(my_df, aes(x=fitted, y=actual)) + 
+  geom_point(aes(color=continent)) + facet_wrap(~ continent, scales = "free") 
 ```
 Here we can see that there is a strong relationship and fit between fitted and actual values for the Oceanic countries. However, there is less of a relationship for the other 4 continents observed. Notably, these four do have similar plots but nonetheless have a weak correlation between the predicted and actual values. Overall, I would call this model fit weak and therefore there may be better variables through which models can be fitted aside from gdpPercap for the gapminder data.
 
@@ -96,24 +101,47 @@ Here we can see that there is a strong relationship and fit between fitted and a
 Let's look at the CV misclassification rate and training misclassification rate based on the output class ```species``` of the ```my_penguins``` data within the package, using the covariants ```bill_length_mm, bill_depth_mm, flipper_length_mm, and body_mass_g```. For this we wil use the k-nearest neighbors cross validation model on up to 10 neighbors (```k_nn```), with a 5-fold cross validation (```k_cv=5```). First, we must load the data, then we can iterate from 1 to 10 knn values:
 
 ```{r}
-data <- data("my_penguins") %>%
+data1 <- my_penguins %>% na.omit() %>%
   select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, species)
 
+k_values <- c(1:10)
 cv_errors <- c()
 train_errs <- c()
-for (i in c(1,10)) {
+for (i in c(1:10)) {
   cv_val <- my_knn_cv(train = data1, cl = 'species', k_nn = i, k_cv = 5)[[1]]
   #training_err_val <- my_knn_cv(train = data1, cl = 'species', k_nn = i, k_cv = 5)[[2]]
   cv_errors <- append(cv_errors, cv_val)
   #train_errs <- append(train_errs, training_err_val)
 }
-data.frame(k_values, cv_errors, train_errs)
+data.frame(k_values, cv_errors)
 ```
 
 State which model you would choose based on the training misclassification rates and which model you would choose based on the CV misclassification rates.
 Discuss which model you would choose in practice and why.
 Your explanation(s) should include a general description of what the process of cross-validation is doing and why it is useful.
 
-##
+## A tutorial for my_rf_cv
 
+```{r}
+k_vals <- c(2,5,10)
+cv_sd <- c()
+cv_means <- c()
+for (i in k_vals) {
+  MSE_vals <- c()
+  for (j in 1:30) {
+    cv_val <- my_rf_cv(i)
+    MSE_vals <- append(MSE_vals, cv_val)
+  }
+  cv_sd <- append(cv_sd, sd(MSE_vals))
+  cv_means <- append(cv_means, mean(MSE_vals))
+}
+results <- data.frame(k_vals, cv_means, cv_sd)
+```
 
+Predict body_mass_g using covariates bill_length_mm, bill_depth_mm, and flipper_length_mm.
+Iterate through k in c(2, 5, 10):
+For each value of k, run your function 30 times.
+For each of the 30 iterations, store the CV estimated MSE.
+Use ggplot2 with 3 boxplots to display these data in an informative way. There should be a boxplot associated with each value of k, representing 30 simulations each.
+Use a table to display the average CV estimate and the standard deviation of the CV estimates across k. Your table should have 3 rows (one for each value of k) and 2 columns (one for the mean and the other for the standard deviation).
+Discuss the results you observe in the boxplots and table. Compare the means and standard deviations of the the different values of k and comment on why you think this is the case.
