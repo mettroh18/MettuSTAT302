@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "rmettu@uw.edu")
 Description: This package contains four key functions that allow for data inference and prediction through various models and methodologies.
-Imports: stats, dplyr, magrittr, randomForest, class, tibble, gapminder
+Imports: stats, dplyr, magrittr, randomForest, class, tibble, gapminder, rlang
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -17,4 +17,7 @@ Depends:
     R (>= 2.10)
 Suggests: 
     testthat,
-    covr
+    covr,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -1,0 +1,20 @@
+---
+title: "Project 2: MettuSTAT302 Tutorial"
+author: "Rohini Mettu"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MettuSTAT302 Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(MettuSTAT302)
+```
