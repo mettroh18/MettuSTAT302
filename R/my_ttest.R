@@ -45,9 +45,9 @@ my_ttest <- function(x, alternative, mu) {
   }
 
 
-  x <- list("test_stat" = test_stat,
+  returnList <- list("test_stat" = test_stat,
             "df" = length(x) - 1,
             "alternative" = alternative,
             "p_val" = p)
-  return (x)
+  return (returnList)
 }

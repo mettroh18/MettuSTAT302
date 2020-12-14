@@ -3,7 +3,7 @@
 
 test_that("t test works mathematically", {
   sample1 <- c(-7, -12, -4, 152, -23, -30, -3)
-  expect_is(my_ttest(sample, alternative="two.sided", 0), "list")
+  expect_is(my_ttest(sample1, alternative="two.sided", 0), "list")
 })
 test_that("non numeric parameter throws error", {
   x <- c("hi", "hello", "good morning")

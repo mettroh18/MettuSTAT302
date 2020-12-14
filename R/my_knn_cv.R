@@ -33,7 +33,7 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
   cbind(data_knn, fold)
 
   #setting aside the true values of class
-  true_class <- select(data_knn, cl)
+  true_class <- data_knn %>% select(cl)
   true_class <- true_class[,1, drop = TRUE]
 
   #running cross validation on k nearest neighbors

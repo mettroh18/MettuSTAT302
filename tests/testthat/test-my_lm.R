@@ -6,7 +6,7 @@ test_that("regression modeling works mathematically", {
   data <- data.frame(x,y)
   output <- my_lm(y~x,data)$Estimate
   #expect_equal(my_lm(y~x,data)$Estimate, c(-2.5, 0.1))
-  expect_is(output, "double")
+  expect_is(output, "numeric")
 })
 test_that("non numeric parameter throws error", {
   x <- c("hi", "hello", "good morning")

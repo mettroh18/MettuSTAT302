@@ -7,6 +7,7 @@
 #' @param k Numeric input data representing the number of folds within data.
 #'
 #' @keywords cross-validation, forest, prediction
+#' @import dplyr
 #'
 #' @return Numeric value of the cross validation error.
 #'
@@ -33,8 +34,8 @@ my_rf_cv <- function(k) {
   #using this model, we predict the data and record the mean squared error
   MSE <- c()
   for (i in 1:k) {
-    data_train <- data %>% filter(fold != i) %>% select(-fold)
-    data_test <- data %>% filter(fold == i) %>% select(-body_mass_g, -fold)
+    data_train <- data %>% filter(fold != i) %>% select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)
+    data_test <- data %>% filter(fold == i) %>% select(bill_length_mm, bill_depth_mm, flipper_length_mm)
 
     test_values <- data %>% filter(fold == i) %>% select(body_mass_g)
     test_values <- test_values[,1, drop = TRUE]

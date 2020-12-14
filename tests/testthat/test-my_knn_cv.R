@@ -8,7 +8,7 @@ test_that("cross validation works", {
   penguins <- data("my_penguins")
   penguins <- na.omit(penguins)
 
-  x <- my_knn_cv(train = penguins, cl = 'species', k_nn = 3, k_cv = 5)[[1]]
+  x <- my_knn_cv(train = penguins, cl = species, k_nn = 3, k_cv = 5)[[1]]
   expect_is(x, "double")
 })
 
