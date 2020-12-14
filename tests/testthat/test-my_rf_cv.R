@@ -8,7 +8,7 @@ test_that("cross validation works", {
   data(package = "palmerpenguins")
   penguins <- na.omit(penguins)
 
-  expect_is(my_rf_cv(5), "numeric")
+  expect_is(my_rf_cv(5), "double")
 })
 
 test_that("non numeric parameter throws error", {
