@@ -5,7 +5,7 @@
 #'
 #' @param formula Formula input that describes the relationship
 #'   being explored in this model.
-#' @param data Numeric input that contains the data used for this model.
+#' @param input Numeric input that contains the data used for this model.
 #'
 #' @keywords regression, inference
 #'
@@ -19,9 +19,9 @@
 #'
 #' @export
 
-my_lm <- function(formula, data) {
-  x <- model.matrix(formula, data)
-  m_frame <- model.frame(formula = formula, data = data)
+my_lm <- function(formula, input) {
+  x <- model.matrix(formula, input)
+  m_frame <- model.frame(formula = formula, data = input)
   y <- model.response(m_frame)
 
   #"Estimate" column
@@ -45,6 +45,7 @@ my_lm <- function(formula, data) {
 
   returnVal <- (data.frame(b_coefficient, se, test_stat, p))
   colnames(returnVal) <- c("Estimate","Std. Error","t value", "Pr(>|t|)")
-  return(table)
+  return(returnVal)
 
 }
+

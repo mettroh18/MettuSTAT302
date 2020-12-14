@@ -18,3 +18,77 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(MettuSTAT302)
 ```
+
+This package was completed as a final project for a course at UW: STAT302, Statistical Computing. This project serves as a culmination of all our new knowledge and skills gained over the quarter. This vignette will demonstrate the various statistical methods we have learned during the course. This package contains four different functions as follows:
+* ```my_ttest``` : a function that conducts a t-test on the given data.
+* ```my_lm``` : a function that outputs a linear regression model based on the given data
+* ```my_knn_cv``` : a function that runs a k-nearest neighbors cross validation on the given data
+* ```my_rf_cv``` : a function that runs a random forest cross validation on the given data
+
+To install the package, one should run the following in their console:
+```{r eval=FALSE}
+devtools::install_github("mettroh18/MettuSTAT302")
+library(MettuSTAT302)
+library(ggplot2)
+```
+
+## A tutorial for my_ttest.
+
+First, we will load the lifeExp data from the ```my_gapminder``` file within the package.
+```{r}
+data(my_gapminder)
+lifeExp <- my_gapminder$lifeExp
+```
+
+We will then perform three tests of mu (the true mean value) against an alpha value of 0.05. This means that if any of these tests produce a value less than alpha, we can reject the null hypothesis in favor of the alternate hypothesis. 
+
+The first will test a null hypothesis of mu=60, and an alternate hypothesis of mu≠60. As this test wants to test inequality, a two-sided t-test must be performed against the value 60:
+
+```{r}
+my_ttest(lifeExp, alternative="two.sided", 60)
+```
+This results in a p-value of 0.09322. As this is greater than alpha (0.05), we fail to reject the null hypothesis in favor of the alternate. Therefore we do not have sufficient evidence that mu≠60.
+
+The second will test a null hypothesis of mu=60, and an alternate hypothesis of mu<60. As this test wants to test a less-than comparison, a one-sided t-test must be performed against the value 60:
+
+```{r}
+my_ttest(lifeExp, alternative="less", 60)
+```
+This results in a p-value of 0.04661. As this is less than alpha (0.05), we *can* reject the null hypothesis in favor of the alternate. We have the evidence to reject the claim that mu is equal to 60.
+
+The second will test a null hypothesis of mu=60, and an alternate hypothesis of mu>60. As this test wants to test a greater-than comparison, a one-sided t-test must be performed against the value 60:
+
+```{r}
+my_ttest(lifeExp, alternative="greater", 60)
+```
+This results in a p-value of 0.95338 As this is more than alpha (0.05), we *fail to* reject the null hypothesis in favor of the alternate. We do not have the evidence to support the claim that mu is greater than 60. Notice that this value has the same result as the second test, and is also the same as 1 - 0.0466 (our p-value from the previous test)
+
+
+## A tutorial for my_lm.
+
+This will demonstrate how to compute a linear regression model against two covariants. Our response variables will be ```lifeExp```, same as our t-test, and our covariants will be ```gdpPercap``` and ```continent```. As we have already loaded our data in this document, we can continue forward with a demonstration of the function:
+
+```{r}
+gapminder_model <- my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
+print(gapminder_model)
+```
+Reminder: The beta coefficient of a covariant represents the increase that occurs for every 1-unit increase in the predictor variable (in this case, gdp and continent), there is a beta increase in the outcome variable (in this case, Life expectancy). Here we can see that the estimated b-coefficient for gdpPercap (given all covariants are controlled) is 0.000445. This means that if lifeExpectancy goes up one year, it is predicted to be a result of a 0.000445 increase in GDP within a country.
+
+If we were to conduct a hypothesis test on this beta value, we would write the hypotheses as follows:
+* H0: the true beta = 0.000445
+* H1: the true beta is more extreme than 0.000445
+
+Using the results above, we can conduct a two sided t-test using a p-value cutoff of α=0.05 using the test value provided in our lm output (18.949). We can see above that the corresponding p-value is 8.552893e-73, extremely small even when multiplied by two to represent both sides of the t-test. This means we can reject our null hypothesis in favor of the alternate, effectively supporting the hypothesis that the true Beta (coefficient) for gdpPercap is more extreme than 0.000445.
+
+```{r}
+my_coef <- gapminder_model$Estimate
+my_matrix <- model.matrix(lifeExp ~ gdpPercap + continent, data = my_gapminder)
+y_hat <- my_matrix %*% as.matrix(my_coef)
+my_df <- data.frame("actual" = my_gapminder$lifeExp, "fitted" = y_hat, "continent" = my_gapminder$continent)
+
+ggplot(my_df, aes(x=fitted, y=actual)) + 
+  geom_point(aes(color=continent)) + facet_wrap(~ continent, scales = "free") 
+```
+Here we can see that there is a strong relationship and fit between fitted and actual values for the Oceanic countries. However, there is less of a relationship for the other 4 continents observed. Notably, these four do have similar plots but nonetheless have a weak correlation between the predicted and actual values. Overall, I would call this model fit weak and therefore there may be better variables through which models can be fitted aside from gdpPercap for the gapminder data.
+
+

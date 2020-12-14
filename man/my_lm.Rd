@@ -4,13 +4,13 @@
 \alias{my_lm}
 \title{Linear Regression Modeling Function}
 \usage{
-my_lm(formula, data)
+my_lm(formula, input)
 }
 \arguments{
 \item{formula}{Formula input that describes the relationship
 being explored in this model.}
 
-\item{data}{Numeric input that contains the data used for this model.}
+\item{input}{Numeric input that contains the data used for this model.}
 }
 \value{
 Table value with the estimated beta coefficient, std Error, test
