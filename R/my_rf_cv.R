@@ -18,7 +18,7 @@
 #' @export
 
 my_rf_cv <- function(k) {
-  penguins <- load(file="data/my_penguins.rda")
+  penguins <- data("my_penguins")
   #assigning folds to training data
   data <- penguins %>%
     select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g)

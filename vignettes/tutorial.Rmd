@@ -86,8 +86,8 @@ my_matrix <- model.matrix(lifeExp ~ gdpPercap + continent, data = my_gapminder)
 y_hat <- my_matrix %*% as.matrix(my_coef)
 my_df <- data.frame("actual" = my_gapminder$lifeExp, "fitted" = y_hat, "continent" = my_gapminder$continent)
 
-ggplot(my_df, aes(x=fitted, y=actual)) + 
-  geom_point(aes(color=continent)) + facet_wrap(~ continent, scales = "free") 
+#ggplot(my_df, aes(x=fitted, y=actual)) + 
+#  geom_point(aes(color=continent)) + facet_wrap(~ continent, scales = "free") 
 ```
 Here we can see that there is a strong relationship and fit between fitted and actual values for the Oceanic countries. However, there is less of a relationship for the other 4 continents observed. Notably, these four do have similar plots but nonetheless have a weak correlation between the predicted and actual values. Overall, I would call this model fit weak and therefore there may be better variables through which models can be fitted aside from gdpPercap for the gapminder data.
 
