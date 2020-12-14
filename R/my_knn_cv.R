@@ -1,0 +1,59 @@
+#' K Nearest Neighbors Cross Validation
+#'
+#' This function takes input to perform a k-nearest neighbors cross validation
+#' to suggest the best data model to use for prediction.
+#'
+#' @param train Numeric input data to train and perform cross validation on.
+#' @param cl String input that represents the column being predicted
+#'   (the true class).
+#' @param k_nn Integer value that represents the number of neighbors.
+#' @param k_cv Integer value that represents the number of yhat predictions.
+#'
+#' @keywords cross-validation, prediction
+#'
+#' @import dplyr
+#'
+#' @return List value containing the average Cross Validation (misclass) error
+#'   and the predicted class values.
+#'
+#' @examples
+#' my_knn_cv(data, "height", 1, 5)
+#' my_knn_cv(data, "height", 3, 5)
+#' my_knn_cv(data, "height", 5, 5)
+#'
+#' @export
+
+my_knn_cv <- function(train, cl, k_nn, k_cv) {
+
+  #assigning folds to training data
+  data_knn <- train
+  n <- nrow(data_knn)
+  inds <- sample(rep(1:k_cv, length = n))
+  fold <- inds
+  cbind(data_knn, fold)
+
+  #setting aside the true values of class
+  true_class <- select(data_knn, cl)
+  true_class <- true_class[,1, drop = TRUE]
+
+  #running cross validation on k nearest neighbors
+  #tracking misclassifications using true test values and yhat predictions
+  misclass <- c()
+  for (i in 1:k_cv) {
+    data_train <- data_knn %>% filter(fold != i) %>% select(-cl, -fold)
+    class <- data_knn %>% filter(fold != i) %>% select(cl)
+    class <- class[,1, drop = TRUE]
+
+    data_test <- data_knn %>% filter(fold == i) %>% select(-cl, -fold)
+    test_values <- data_knn %>% filter(fold == i) %>% select(cl)
+    test_values <- test_values[,1, drop = TRUE]
+
+    yhat_class <- knn(data_train, data_test, class, k=k_nn, prob=TRUE)
+    misclass_rate <- sum(test_values != yhat_class) / length(test_values)
+
+    misclass <- append(misclass, misclass_rate)
+  }
+  cv_err <- mean(misclass)
+  class <- knn(train %>% select (-cl), train %>% select (-cl), as.character(true_class), k=k_nn)
+  return(as.list(cv_err, class))
+}
