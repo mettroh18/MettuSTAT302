@@ -21,7 +21,7 @@ The vignette demonstrates example usage of all main functions. Please file an is
 ```
 # install.packages("devtools")
 devtools::install_github("mettroh18/MettuSTAT302", build_vignette = TRUE, build_opts = c())
-library(corncob)
+library(MettuSTAT302)
 # Use this to view the vignette in the corncob HTML help
 help(package = "MettuSTAT302", help_type = "html")
 # Use this to view the vignette as an isolated HTML file
