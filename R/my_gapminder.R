@@ -1,32 +1,55 @@
-#' Measurements for life expectancy, population, and GDP from around the world.
+#' Gapminder data.
 #'
-#' Includes measurements and records of life expectancy, population, and
-#' GDP for each country during multiple years.
+#' Excerpt of the Gapminder data on life expectancy, GDP per capita, and
+#' population by country.
 #' This data and documentation come from the \code{gapminder} package,
 #' available as \code{\link[gapminder]{gapminder}}.
 #'
-#' @format A tibble with 344 rows and 8 variables:
+#' @format The main data frame \code{gapminder} has 1704 rows and 6 variables:
 #' \describe{
-#'   \item{country}{a factor denoting country}
-#'   \item{continent}{a factor denoting continent (Asia, Europe, Africa, Americas, Oceania)}
-#'   \item{year}{a number denoting the year}
-#'   \item{lifeExp}{a number denoting life expectancy at birth (in years)}
-#'   \item{pop}{a number denoting the total population}
-#'   \item{gdpPercap}{a number denoting per-capita GDP}
-#' }
-#' @source {Babies per Woman (total fertlity rate)} \url{https://www.gapminder.org/data/documentation/gd008/}
-#' @source {Child Mortality Rate, under age five} \url{https://www.gapminder.org/data/documentation/gd005/}
-#' @source {GDP per capita in constant PPP dollars} \url{https://www.gapminder.org/data/documentation/gd001/}
-#' @source {Infant Mortality Rate, under age one} \url{https://www.gapminder.org/data/documentation/gd002/}
-#' @source {Life Expectancy at Birth}\url{https://www.gapminder.org/data/documentation/gd004/}
-#' @source {Population}\url{https://www.gapminder.org/data/documentation/gd003/}
-#' @source {Average age at 1st marriage (girls)}\url{https://www.gapminder.org/data/documentation/gd009/}
-#' @source {Gini}\url{http://gapm.io/doc_gini}
-#' @source {HIV/AIDS}\url{https://www.gapminder.org/data/documentation/gd006/}
-#' @source {Legal slavery}\url{https://www.gapminder.org/data/documentation/gd010/}
-#' @source {Maternal mortality}\url{https://www.gapminder.org/data/documentation/gd010/}
-#' @source {Income Mountains}\url{https://www.gapminder.org/data/documentation/income-mountains-dataset/}
-#' @source {World Health Chart, data sources}\url{https://www.gapminder.org/data/documentation/gd000/}
-#' @source {MORE DATA SOURCES ON GAPMINDER WEBSITE HERE:}\url{https://www.gapminder.org/data/}
+#'   \item{country}{factor with 142 levels}
+#'   \item{continent}{factor with 5 levels}
+#'   \item{year}{ranges from 1952 to 2007 in increments of 5 years}
+#'   \item{lifeExp}{life expectancy at birth, in years}
+#'   \item{pop}{population}
+#'   \item{gdpPercap}{GDP per capita (US$, inflation-adjusted)}
+#'   }
 #'
-"my_penguins"
+#' The supplemental data frame \code{\link{gapminder_unfiltered}} was not
+#' filtered on \code{year} or for complete data and has 3313 rows.
+#'
+#' @source \url{http://www.gapminder.org/data/}
+#' @seealso \code{\link{country_colors}} for a nice color scheme for the countries
+#' @importFrom tibble tibble
+#' @examples
+#' str(gapminder)
+#' head(gapminder)
+#' summary(gapminder)
+#' table(gapminder$continent)
+#' aggregate(lifeExp ~ continent, gapminder, median)
+#' plot(lifeExp ~ year, gapminder, subset = country == "Cambodia", type = "b")
+#' plot(lifeExp ~ gdpPercap, gapminder, subset = year == 2007, log = "x")
+#'
+#' if (require("dplyr")) {
+#' gapminder %>%
+#'   filter(year == 2007) %>%
+#'   group_by(continent) %>%
+#'   summarise(lifeExp = median(lifeExp))
+#'
+#' # how many unique countries does the data contain, by continent?
+#' gapminder %>%
+#'   group_by(continent) %>%
+#'   summarize(n_obs = n(), n_countries = n_distinct(country))
+#'
+#' # by continent, which country experienced the sharpest 5-year drop in
+#' # life expectancy and what was the drop?
+#' gapminder %>%
+#'   group_by(continent, country) %>%
+#'   select(country, year, continent, lifeExp) %>%
+#'   mutate(le_delta = lifeExp - lag(lifeExp)) %>%
+#'   summarize(worst_le_delta = min(le_delta, na.rm = TRUE)) %>%
+#'   filter(min_rank(worst_le_delta) < 2) %>%
+#'   arrange(worst_le_delta)
+#' }
+#'
+"my_gapminder"
