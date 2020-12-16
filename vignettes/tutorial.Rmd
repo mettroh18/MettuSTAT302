@@ -118,9 +118,8 @@ for (i in c(1:10)) {
 data.frame(k_values, cv_errors, train_errs)
 ```
 
-State which model you would choose based on the training misclassification rates and which model you would choose based on the CV misclassification rates.
-Discuss which model you would choose in practice and why.
-Your explanation(s) should include a general description of what the process of cross-validation is doing and why it is useful.
+S
+Based on these models, one might choose the fourth model based on the cross validation misclassification errors alone. If you chose to focus on solely training errors, one might choose the first or second model to base future analysis on. In practice, it is best to find a middle ground that has less error on training data and a smaller misclassification rate (in other words, we want to choose a cross validation model that reduces the misclassification on test and nontraining data, while reducing errors on the training data itself). An option might be using model model 4, with the smallest CV error and a "medium" training error. 
 
 ## A tutorial for my_rf_cv
 
@@ -141,5 +140,4 @@ for (i in k_vals) {
 results <- data.frame(k_vals, cv_means, cv_sd)
 print(results)
 ```
-
-Discuss the results you observe in the boxplots and table. Compare the means and standard deviations of the the different values of k and comment on why you think this is the case.
+From these results we can see that a higher number of k leads to a lower standard deviation. This means there is less variability within the estimate output data. In the boxplots we can also see that the third model is more "evenly" spread across a smaller range while the other two models have a much wider range. From this we can infer that a larger value of k delivers more precise results (remember, precision is not equal to accuracy).
