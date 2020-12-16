@@ -20,4 +20,16 @@
 #' @source {Gentoo penguins: Palmer Station Antarctica LTER and K. Gorman. 2020. Structural size measurements and isotopic signatures of foraging among adult male and female Gentoo penguin (Pygoscelis papua) nesting along the Palmer Archipelago near Palmer Station, 2007-2009 ver 5. Environmental Data Initiative} \url{https://doi.org/10.6073/pasta/7fca67fb28d56ee2ffa3d9370ebda689}
 #' @source {Chinstrap penguins: Palmer Station Antarctica LTER and K. Gorman. 2020. Structural size measurements and isotopic signatures of foraging among adult male and female Chinstrap penguin (Pygoscelis antarcticus) nesting along the Palmer Archipelago near Palmer Station, 2007-2009 ver 6. Environmental Data Initiative} \url{https://doi.org/10.6073/pasta/c14dfcfada8ea13a17536e73eb6fbe9e}
 #' @source {Originally published in: Gorman KB, Williams TD, Fraser WR (2014) Ecological Sexual Dimorphism and Environmental Variability within a Community of Antarctic Penguins (Genus Pygoscelis). PLoS ONE 9(3): e90081. doi:10.1371/journal.pone.0090081}
+#'
+#' @examples
+#' str(my_penguins)
+#' head(my_penguins)
+#' summary(my_penguins)
+#' table(my_penguins$sex)
+#' aggregate(flipper_length_mm ~ species, my_penguins, median)
+#'
+#' # how many unique bill lengths does the data contain, by species?
+#' my_penguins %>%
+#'   group_by(species) %>%
+#'   summarize(n_obs = n(), n_countries = n_distinct(bill_length_mm))
 "my_penguins"

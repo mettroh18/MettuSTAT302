@@ -17,8 +17,8 @@ my_knn_cv(train, cl, k_nn, k_cv)
 \item{k_cv}{Integer value that represents the number of yhat predictions.}
 }
 \value{
-List value containing the average Cross Validation (misclass) error
-and the predicted class values.
+List value containing the average Cross Validation (misclass) error,
+the predicted class values, and the training misclassification error.
 }
 \description{
 This function takes input to perform a k-nearest neighbors cross validation

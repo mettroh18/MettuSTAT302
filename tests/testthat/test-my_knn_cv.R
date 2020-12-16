@@ -1,11 +1,9 @@
 #tests within test-my_knn_cv file
 
 test_that("cross validation works", {
-  penguins <- my_penguins
-  penguins <- na.omit(penguins)
-
-  x <- my_knn_cv(train = penguins, cl = 'species', k_nn = 3, k_cv = 5)[[1]]
-  expect_is(x, "numeric")
+  data1 <- my_penguins %>% na.omit() %>%
+    dplyr::select(bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g, species)
+  expect_is(my_knn_cv(train = data1, cl = 'species', k_nn = 3, k_cv = 5), "list")
 })
 
 test_that("non numeric parameter throws error", {

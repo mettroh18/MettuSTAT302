@@ -14,8 +14,8 @@
 #' @import dplyr
 #' @import class
 #'
-#' @return List value containing the average Cross Validation (misclass) error
-#'   and the predicted class values.
+#' @return List value containing the average Cross Validation (misclass) error,
+#'   the predicted class values, and the training misclassification error.
 #'
 #' @examples
 #' my_knn_cv(data, "height", 1, 5)
@@ -38,23 +38,28 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
   true_class <- true_class[,1, drop = TRUE]
 
   #running cross validation on k nearest neighbors
-  #tracking misclassifications using true test values and yhat predictions
+  #tracking misclassifications using true test/training values
+  #and yhat/predictions
   misclass <- c()
   for (i in 1:k_cv) {
     data_train <- data_knn %>% filter(fold != i) %>% select(-cl, -fold)
-    class <- data_knn %>% filter(fold != i) %>% select(cl)
-    class <- class[,1, drop = TRUE]
+    train_class <- data_knn %>% filter(fold != i) %>% select(cl)
+    train_class <- train_class[,1, drop = TRUE]
 
     data_test <- data_knn %>% filter(fold == i) %>% select(-cl, -fold)
     test_values <- data_knn %>% filter(fold == i) %>% select(cl)
     test_values <- test_values[,1, drop = TRUE]
 
-    yhat_class <- class::knn(data_train, data_test, class, k=k_nn, prob=TRUE)
-    misclass_rate <- sum(test_values != yhat_class) / length(test_values)
+    yhat_class <- class::knn(data_train, data_test, as.numeric(train_class), k=k_nn, prob=TRUE)
+    misclass_rate <- sum(as.numeric(test_values) != yhat_class) / length(test_values)
 
     misclass <- append(misclass, misclass_rate)
   }
   cv_err <- mean(misclass)
-  class <- knn(train %>% select (-cl), train %>% select (-cl), as.numeric(true_class), k=k_nn)
-  return(as.list(cv_err, class))
+  pred_class <- class::knn(train %>% select (-cl), train %>% select (-cl), as.numeric(true_class), k=k_nn)
+  train_err <- sum(pred_class != as.numeric(true_class)) / length(true_class)
+  returnList <- list("train_misclass" = train_err,
+                     "cv_misclass" = cv_err,
+                     "predicted" = pred_class)
+  return(returnList)
 }

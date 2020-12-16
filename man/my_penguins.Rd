@@ -35,4 +35,16 @@ size (flipper length, body mass, bill dimensions), and sex.
 This data and documentation come from the \code{palmerpenguins} package,
 available as \code{\link[palmerpenguins]{penguins}}.
 }
+\examples{
+str(my_penguins)
+head(my_penguins)
+summary(my_penguins)
+table(my_penguins$sex)
+aggregate(flipper_length_mm ~ species, my_penguins, median)
+
+# how many unique bill lengths does the data contain, by species?
+my_penguins \%>\%
+  group_by(species) \%>\%
+  summarize(n_obs = n(), n_countries = n_distinct(bill_length_mm))
+}
 \keyword{datasets}
