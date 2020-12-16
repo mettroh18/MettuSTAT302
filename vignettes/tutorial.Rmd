@@ -110,8 +110,8 @@ k_values <- c(1:10)
 cv_errors <- c()
 train_errs <- c()
 for (i in c(1:10)) {
-  cv_val <- my_knn_cv(train = data1, cl = 'species', k_nn = i, k_cv = 5)$cv_misclass
-  train_err_val <- my_knn_cv(train = data1, cl = 'species', k_nn = i, k_cv = 5)$train_misclass
+  cv_val <- my_knn_cv(train = data1, true_cl = 'species', k_nn = i, k_cv = 5)$cv_misclass
+  train_err_val <- my_knn_cv(train = data1, true_cl = 'species', k_nn = i, k_cv = 5)$train_misclass
   cv_errors <- append(cv_errors, cv_val)
   train_errs <- append(train_errs, train_err_val)
 }

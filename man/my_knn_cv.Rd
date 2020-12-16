@@ -4,12 +4,12 @@
 \alias{my_knn_cv}
 \title{K Nearest Neighbors Cross Validation}
 \usage{
-my_knn_cv(train, cl, k_nn, k_cv)
+my_knn_cv(train, true_cl, k_nn, k_cv)
 }
 \arguments{
 \item{train}{Numeric input data to train and perform cross validation on.}
 
-\item{cl}{String input that represents the column being predicted
+\item{true_cl}{String input that represents the column being predicted
 (the true class).}
 
 \item{k_nn}{Integer value that represents the number of neighbors.}

@@ -4,7 +4,7 @@
 #' to suggest the best data model to use for prediction.
 #'
 #' @param train Numeric input data to train and perform cross validation on.
-#' @param cl String input that represents the column being predicted
+#' @param true_cl String input that represents the column being predicted
 #'   (the true class).
 #' @param k_nn Integer value that represents the number of neighbors.
 #' @param k_cv Integer value that represents the number of yhat predictions.
@@ -24,7 +24,7 @@
 #'
 #' @export
 
-my_knn_cv <- function(train, cl, k_nn, k_cv) {
+my_knn_cv <- function(train, true_cl, k_nn, k_cv) {
 
   #assigning folds to training data
   data_knn <- train
@@ -34,7 +34,7 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
   cbind(data_knn, fold)
 
   #setting aside the true values of class
-  true_class <- data_knn %>% select(cl)
+  true_class <- data_knn %>% dplyr::select(true_cl)
   true_class <- true_class[,1, drop = TRUE]
 
   #running cross validation on k nearest neighbors
@@ -42,12 +42,12 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
   #and yhat/predictions
   misclass <- c()
   for (i in 1:k_cv) {
-    data_train <- data_knn %>% filter(fold != i) %>% select(-cl, -fold)
-    train_class <- data_knn %>% filter(fold != i) %>% select(cl)
+    data_train <- data_knn %>% dplyr::filter(fold != i) %>% dplyr::select(-true_cl, -fold)
+    train_class <- data_knn %>% dplyr::filter(fold != i) %>% dplyr::select(true_cl)
     train_class <- train_class[,1, drop = TRUE]
 
-    data_test <- data_knn %>% filter(fold == i) %>% select(-cl, -fold)
-    test_values <- data_knn %>% filter(fold == i) %>% select(cl)
+    data_test <- data_knn %>% dplyr::filter(fold == i) %>% dplyr::select(-true_cl, -fold)
+    test_values <- data_knn %>% dplyr::filter(fold == i) %>% dplyr::select(true_cl)
     test_values <- test_values[,1, drop = TRUE]
 
     yhat_class <- class::knn(data_train, data_test, as.numeric(train_class), k=k_nn, prob=TRUE)
@@ -56,7 +56,7 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
     misclass <- append(misclass, misclass_rate)
   }
   cv_err <- mean(misclass)
-  pred_class <- class::knn(train %>% select (-cl), train %>% select (-cl), as.numeric(true_class), k=k_nn)
+  pred_class <- class::knn(train %>% select (-true_cl), train %>% select (-true_cl), as.numeric(true_class), k=k_nn)
   train_err <- sum(pred_class != as.numeric(true_class)) / length(true_class)
   returnList <- list("train_misclass" = train_err,
                      "cv_misclass" = cv_err,
