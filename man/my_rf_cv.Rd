@@ -19,7 +19,7 @@ bill_depth_mm, and flipper_length_mm.
 }
 \examples{
 my_rf_cv(5)
-my_rf_cv(1)
+my_rf_cv(4)
 my_rf_cv(3)
 
 }

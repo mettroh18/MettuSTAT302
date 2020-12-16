@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' my_rf_cv(5)
-#' my_rf_cv(1)
+#' my_rf_cv(4)
 #' my_rf_cv(3)
 #'
 #' @export

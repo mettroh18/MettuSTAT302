@@ -28,8 +28,10 @@
 #' table(my_penguins$sex)
 #' aggregate(flipper_length_mm ~ species, my_penguins, median)
 #'
-#' # how many unique bill lengths does the data contain, by species?
+#' if (require("dplyr")) {
+#' # what is the mean bill length by species?
 #' my_penguins %>%
 #'   group_by(species) %>%
-#'   summarize(n_obs = n(), n_countries = n_distinct(bill_length_mm))
+#'   mean(bill_length_mm)
+#' }
 "my_penguins"

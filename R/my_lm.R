@@ -13,9 +13,17 @@
 #'   statistic, and p-value.
 #'
 #' @examples
-#' my_lm(y~x, data)
-#' my_lm(weight~height + gender, myData)
-#' my_lm(temp~latitude + humidity + pollution, worldData)
+#' data_x <- c(1, 2, 3, 3, 2, 3, 2, 1, 1, 1, 2, 1, 2, 3, 3)
+#' data_x2 <- c(10, 50, 30, 30, 20, 30, 20, 10, 10, 10, 20, 10, 20, 30, 30)
+#' data_x3 <- c(13, 22, 43, 83, 42, 73, 22, 13, 11, 41, 62, 91, 22, 53, 53)
+#' data_x4 <- c(14, 23, 132, 123, 572, 123, 242, 641, 231, 651, 232, 541, 232, 163, 833)
+#' data_y <- c(13, 72, 33, 43, 72, 83, 32, 21, 15, 12, 62, 31, 27, 33, 36)
+#'
+#' dataframe1 <- data.frame(data_x, data_x2, data_x3, data_x4, data_y)
+#'
+#' my_lm(data_x3~data_x2, dataframe1)
+#' my_lm(data_y~data_x3 + data_x2, dataframe1)
+#' my_lm(data_y~data_x + data_x2 + data_x3, dataframe1)
 #'
 #' @export
 
