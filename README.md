@@ -15,7 +15,7 @@ devtools::install_github("mettroh18/MettuSTAT302")
 library(MettuStat302)
 ```
 
-#Use
+# Use
 The vignette demonstrates example usage of all main functions. Please file an issue if you have a request for a tutorial that is not currently included. You can see the vignette by using the following code (note that this requires a TeX installation to view properly):
 
 ```
